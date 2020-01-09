@@ -160,7 +160,7 @@ namespace ImageAlphaAdd
                         }
 
                         T = (TGA)newResult;
-                        T.Save(txtBaseImageLocation.Text.Substring(0, txtBaseImageLocation.Text.IndexOf("\\")) + ".tga");
+                        T.Save(txtBaseImageLocation.Text.Substring(0, txtBaseImageLocation.Text.LastIndexOf(".")) + ".tga");
                         lblProgramTitle.Text = "The Image Is Done!";
                         tmrLabelSwitchPrompt.Start();
                     }
