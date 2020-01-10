@@ -31,6 +31,19 @@ namespace ImageAlphaAdd
         {
             this.BackColor = ColorTranslator.FromHtml("#FF21252B");
             loadUserInput();
+            if (chkSaveElsewhere.Checked)
+            {
+                btnOutputDir.Text = "Output Directory";
+                btnOutputDir.Enabled = true;
+                txtOutputDir.Enabled = true;
+
+            }
+            else
+            {
+                btnOutputDir.Text = "Saving In Same Place";
+                btnOutputDir.Enabled = false;
+                txtOutputDir.Enabled = false;
+            }
         }
 
         private void frmImageAlphaAdder_FormClosing(object sender, FormClosingEventArgs e)
@@ -103,6 +116,22 @@ namespace ImageAlphaAdd
                 alphaImage = new Bitmap(txtAlphaImageLocation.Text);
             }
         }
+        
+        private void btnOutputDir_Click(object sender, EventArgs e)
+        {
+            CommonOpenFileDialog outputFolderBrowser = new CommonOpenFileDialog
+            {
+                InitialDirectory = @"C:\",
+                Title = "Browse output folder",
+                RestoreDirectory = true,
+            };
+
+            outputFolderBrowser.IsFolderPicker = true;
+            if (outputFolderBrowser.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                txtOutputDir.Text = outputFolderBrowser.FileName + "\\";
+            }
+        }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
@@ -145,14 +174,23 @@ namespace ImageAlphaAdd
                         }
 
                         T = (TGA)newResult;
-                        T.Save(txtBaseImageLocation.Text.Substring(0, txtBaseImageLocation.Text.LastIndexOf(".")) + ".tga");
+                        if (chkSaveElsewhere.Checked)
+                        {
+                            String outputDir = txtOutputDir.Text.Substring(0, txtOutputDir.Text.LastIndexOf("\\"));
+                            String fileName = txtBaseImageLocation.Text.Substring(txtBaseImageLocation.Text.LastIndexOf("\\"));
+                            T.Save(outputDir + fileName.Substring(0, fileName.LastIndexOf(".")) + ".tga");
+                        }
+                        else
+                        {
+                            T.Save(txtBaseImageLocation.Text.Substring(0, txtBaseImageLocation.Text.LastIndexOf(".")) + ".tga");
+                        }
                         lblProgramTitle.Text = "The Image Is Done!";
                         tmrLabelSwitchPrompt.Start();
                     }
                 }
                 catch (Exception)
                 {
-                    lblProgramTitle.Text = "Incorrect Alpha Size!";
+                    lblProgramTitle.Text = "Incorrect Parameters!";
                     tmrLabelSwitchPrompt.Start();
                 }
             }
@@ -190,13 +228,43 @@ namespace ImageAlphaAdd
             }
         }
         
+        private void chkSaveElsewhere_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkSaveElsewhere.Checked)
+            {
+                btnOutputDir.Text = "Output Directory";
+                btnOutputDir.Enabled = true;
+                txtOutputDir.Enabled = true;
+
+            }
+            else
+            {
+                btnOutputDir.Text = "Saving In Same Place";
+                btnOutputDir.Enabled = false;
+                txtOutputDir.Enabled = false;
+            }
+        }
+        
         private void saveUserInput()
         {
             ImageAlphaAdd.Properties.Settings.Default.BaseImageLocation = txtBaseImageLocation.Text;
             ImageAlphaAdd.Properties.Settings.Default.AlphaImageLocation = txtAlphaImageLocation.Text;
+            ImageAlphaAdd.Properties.Settings.Default.OutputDirectoryLocation = txtOutputDir.Text; ;
             if (radTextures.Checked)
             {
                 ImageAlphaAdd.Properties.Settings.Default.ProgramOptionChoice = 1;
+            }
+            else if (radHUDIcon.Checked)
+            {
+                ImageAlphaAdd.Properties.Settings.Default.ProgramOptionChoice = 2;
+            }
+            if (chkSaveElsewhere.Checked)
+            {
+                ImageAlphaAdd.Properties.Settings.Default.SaveElsewhereChoice = 1;
+            }
+            else
+            {
+                ImageAlphaAdd.Properties.Settings.Default.SaveElsewhereChoice = 2;
             }
             ImageAlphaAdd.Properties.Settings.Default.Save();
         }
@@ -205,9 +273,31 @@ namespace ImageAlphaAdd
         {
             txtBaseImageLocation.Text = ImageAlphaAdd.Properties.Settings.Default.BaseImageLocation;
             txtAlphaImageLocation.Text = ImageAlphaAdd.Properties.Settings.Default.AlphaImageLocation;
+            txtOutputDir.Text = ImageAlphaAdd.Properties.Settings.Default.OutputDirectoryLocation;
             if (ImageAlphaAdd.Properties.Settings.Default.ProgramOptionChoice == 1)
             {
                 radTextures.Checked = true;
+            }
+            else if (ImageAlphaAdd.Properties.Settings.Default.ProgramOptionChoice == 2)
+            {
+                radHUDIcon.Checked = true;
+            }
+            if (ImageAlphaAdd.Properties.Settings.Default.SaveElsewhereChoice == 1)
+            {
+                chkSaveElsewhere.Checked = true;
+            }
+            else
+            {
+                chkSaveElsewhere.Checked = false;
+            }
+            if (txtBaseImageLocation.Text.Equals("") || txtAlphaImageLocation.Text.Equals(""))
+            {
+
+            }
+            else
+            {
+                baseImage = new Bitmap(txtBaseImageLocation.Text);
+                alphaImage = new Bitmap(txtAlphaImageLocation.Text);
             }
         }
     }
