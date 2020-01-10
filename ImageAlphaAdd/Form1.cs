@@ -30,6 +30,12 @@ namespace ImageAlphaAdd
         private void frmImageAlphaAdder_Load(object sender, EventArgs e)
         {
             this.BackColor = ColorTranslator.FromHtml("#FF21252B");
+            loadUserInput();
+        }
+
+        private void frmImageAlphaAdder_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            saveUserInput();
         }
 
         private void btnSteamLink_Click(object sender, EventArgs e)
@@ -53,28 +59,7 @@ namespace ImageAlphaAdd
                 tmrRetractWindow.Start();
             }
         }
-
-        private void tmrExpandWindow_Tick(object sender, EventArgs e)
-        {
-            this.Width += 5;
-            if (this.Width == 836)
-            {
-                tmrExpandWindow.Stop();
-                expandedWindow = true;
-            }
-
-        }
-
-        private void tmrRetractWindow_Tick(object sender, EventArgs e)
-        {
-            this.Width -= 5;
-            if (this.Width == 601)
-            {
-                tmrRetractWindow.Stop();
-                expandedWindow = false;
-            }
-        }
-
+        
         private void btnBaseImage_Click(object sender, EventArgs e)
         {
             CommonOpenFileDialog baseImageBrowser = new CommonOpenFileDialog
@@ -181,6 +166,48 @@ namespace ImageAlphaAdd
                 tmrLabelSwitchPrompt.Stop();
                 counter = 0;
                 lblProgramTitle.Text = "Image Alpha Adder";
+            }
+        }
+        
+        private void tmrExpandWindow_Tick(object sender, EventArgs e)
+        {
+            this.Width += 5;
+            if (this.Width == 836)
+            {
+                tmrExpandWindow.Stop();
+                expandedWindow = true;
+            }
+
+        }
+
+        private void tmrRetractWindow_Tick(object sender, EventArgs e)
+        {
+            this.Width -= 5;
+            if (this.Width == 601)
+            {
+                tmrRetractWindow.Stop();
+                expandedWindow = false;
+            }
+        }
+        
+        private void saveUserInput()
+        {
+            ImageAlphaAdd.Properties.Settings.Default.BaseImageLocation = txtBaseImageLocation.Text;
+            ImageAlphaAdd.Properties.Settings.Default.AlphaImageLocation = txtAlphaImageLocation.Text;
+            if (radTextures.Checked)
+            {
+                ImageAlphaAdd.Properties.Settings.Default.ProgramOptionChoice = 1;
+            }
+            ImageAlphaAdd.Properties.Settings.Default.Save();
+        }
+
+        private void loadUserInput()
+        {
+            txtBaseImageLocation.Text = ImageAlphaAdd.Properties.Settings.Default.BaseImageLocation;
+            txtAlphaImageLocation.Text = ImageAlphaAdd.Properties.Settings.Default.AlphaImageLocation;
+            if (ImageAlphaAdd.Properties.Settings.Default.ProgramOptionChoice == 1)
+            {
+                radTextures.Checked = true;
             }
         }
     }
