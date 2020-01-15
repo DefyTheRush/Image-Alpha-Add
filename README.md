@@ -1,9 +1,9 @@
 # Image Alpha Add
 A C# program to make adding alpha layers to existing images easier
 
-![The_Program](https://i.imgur.com/GhiCggr.jpg)
+[![Downloads](https://img.shields.io/badge/downloads-2-brightgreen.svg)](https://github.com/DefyTheRush/Image-Alpha-Add/releases)
 
-You can download the program [here](https://www.dropbox.com/s/3ww6hsfiyzzkye3/ImageAlphaAdd.exe?dl=1)
+![The_Program](https://i.imgur.com/GhiCggr.jpg)
 
 Notice:
 - This project is in development! Some features may not work as expected because they are not finished yet (and eventually they will be)
