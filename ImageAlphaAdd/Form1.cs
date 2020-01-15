@@ -24,6 +24,8 @@ namespace ImageAlphaAdd
         private void frmImageAlphaAdder_Load(object sender, EventArgs e)
         {
             this.BackColor = ColorTranslator.FromHtml("#FF21252B");
+            txtBaseImageLocation.ReadOnly = true;
+            txtAlphaImageLocation.ReadOnly = true;
             loadUserInput();
             checkToggles(2);
         }
@@ -158,11 +160,22 @@ namespace ImageAlphaAdd
                 lblProgramTitle.Text = " Need Base Image!";
                 tmrLabelSwitchPrompt.Start();
             }
+            
             else if (txtAlphaImageLocation.Text.Equals("") || alphaImage == null)
             {
                 invalidImageType = true;
                 lblProgramTitle.Text = "Need Alpha Image!";
                 tmrLabelSwitchPrompt.Start();
+            }
+            
+            if (chkSaveElsewhere.Checked)
+            {
+                if (txtOutputDir.Text.Equals(""))
+                {
+                    invalidImageType = true;
+                    lblProgramTitle.Text = "Need Output Area!";
+                    tmrLabelSwitchPrompt.Start();
+                }
             }
 
             if (invalidImageType == true)
@@ -296,6 +309,7 @@ namespace ImageAlphaAdd
             {
                 radHUDIcon.Checked = true;
             }
+            
             if (ImageAlphaAdd.Properties.Settings.Default.SaveElsewhereChoice == 1)
             {
                 chkSaveElsewhere.Checked = true;
@@ -304,6 +318,7 @@ namespace ImageAlphaAdd
             {
                 chkSaveElsewhere.Checked = false;
             }
+            
             if (txtBaseImageLocation.Text.Equals("") || txtAlphaImageLocation.Text.Equals(""))
             {
 
